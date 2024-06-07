@@ -1,14 +1,10 @@
 """
 Credentials for sending inspiring quotes with image to MS Teams channel
 """
-# Enter your Pexel API key
-PEXEL_API_KEY = 'Your Pexel API Key'
+PEXEL_API_KEY = "Your Pexel API Key"    # Enter your Pexel API key
 
-# Enter your MS Teams Webhook Url
-WEBHOOK_TEAMS = 'Your Webhook'
+WEBHOOK_TEAMS = "Your Webhook"  # Enter your MS Teams Webhook Url
 
-# Enter zenquotes.io API Url
-QUOTE_URL = "https://zenquotes.io/api/random"
+QUOTE_URL = "https://zenquotes.io/api/random"   # Enter zenquotes.io API Url
 
-# Enter in format <Name Surname>
-OWNER = "Name Surname"
+OWNER = "Name Surname"  # Enter in format <Name Surname>

@@ -1,40 +1,64 @@
-import requests
 import logging
+
+import requests
+
+from custom_errors import (
+    NoResponseFromQuoteUrl,
+    JSONExtractError
+)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("Quote_Load_Logger")
 
 
-class QuoteException(Exception):
-    pass
+def get_response(quote_url):
+    try:
+        logger.info("Looking for the inspiring quote...")
+        quote_response = requests.get(quote_url)
+    except requests.exceptions.RequestException as e:
+        logger.info("No response from Quote url")
+        logger.info(e)
+        raise NoResponseFromQuoteUrl("No response from Quote url")
 
-
-class NoResponseFromQuoteUrl(QuoteException):
-    pass
+    return quote_response
 
 
 def get_quote(quote_url):
+    quote_response = get_response(quote_url)
     try:
-        logger.info('Looking for the inspiring quote...')
-        quote_resp = requests.get(quote_url)
-        quote_text = quote_resp.json()[0]['q']
-        logger.info('Quote text load success')
-        quote_author = quote_resp.json()[0]['a']
-        logger.info('Quote author load success')
-
-        return quote_text, quote_author
-    except requests.exceptions.RequestException as e:
-        logger.info('No response from Quote url')
+        response_dict = quote_response.json()
+    except requests.exceptions.JSONDecodeError as e:
+        logger.info("Response could not be serialized")
         logger.info(e)
+        raise JSONExtractError("Response could not be serialized")
 
-        raise NoResponseFromQuoteUrl('No response from Quote url')
-
+    try:
+        quote_text = response_dict[0]["q"]
+        logger.info("Quote text extracted successfully")
+        quote_author = response_dict[0]["a"]
+        logger.info("Quote author extracted successfully")
     except KeyError as e:
-        logger.info('No such key in Response dict')
+        logger.info("No such key in Response dict")
         logger.info(e)
-
-        raise KeyError('No such key in Response dict')
+        raise KeyError("No such key in Response dict")
+    logger.info(f"\nQuote:{quote_text}\n"
+                f"Author:{quote_author}")
+    return quote_text, quote_author
 
 
 if __name__ == "__main__":
-    get_quote('quote_url')
+    get_quote("https://zenquotes.io/api/random")
+
+
+"""    
+if mode == "text":
+        json_key = "q"
+        logger.info("Quote text string extracting...")
+    elif mode == "author":
+        json_key = "a"
+        logger.info("Quote author string extracting...")
+    else:
+        logger.info(f"No such mode: {mode} in this function")
+        raise NoSuchModeImplemented(f"No such mode: {mode} in this function")
+        
+"""
