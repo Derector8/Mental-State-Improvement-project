@@ -14,7 +14,7 @@ with DAG(
     )
 
     email_op = EmailOperator(
-        task_id="email yourself",
+        task_id="email_yourself",
         to="bucharevroman@gmail.com",
         subject='Message from Airflow',
         html_content='<p>Hello from Airflow</p>',
