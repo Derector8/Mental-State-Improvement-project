@@ -3,15 +3,15 @@ from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 
-import sprint_2.scripts.credentials as cr
-import sprint_2.scripts.main as m
+import scripts.credentials as cr
+import scripts.main as m
 
 
 with DAG(
-        dag_id="MSI_2_dag",
+        dag_id="MSI_4_dag",
         start_date=pendulum.today(),
         schedule_interval='0 12 * * 3',
-        tags=["MSI2"]
+        tags=["MSI4"]
 ) as dag:
     start_op = EmptyOperator(task_id="start")
 
@@ -20,7 +20,7 @@ with DAG(
         python_callable=m.main_msi_4,
         op_kwargs={"pexel_api_key": cr.PEXEL_API_KEY,
                    "webhook_teams": cr.WEBHOOK_TEAMS,
-                   "owner": cr.OWNER},
+                   "message_sender_name": cr.MESSAGE_SENDER_NAME},
     )
 
     finish_op = EmptyOperator(task_id="finish")
