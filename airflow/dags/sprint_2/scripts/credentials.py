@@ -7,4 +7,4 @@ WEBHOOK_TEAMS = "Your Webhook"  # Enter your MS Teams Webhook Url
 
 QUOTE_URL = "https://zenquotes.io/api/random"   # Enter zenquotes.io API Url
 
-OWNER = "Name Surname"  # Enter in format <Name Surname>
+MESSAGE_SENDER_NAME = "Name Surname"  # Enter in format <Name Surname>
