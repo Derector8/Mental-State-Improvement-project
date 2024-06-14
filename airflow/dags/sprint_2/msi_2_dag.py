@@ -3,8 +3,8 @@ from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 
-import sprint_2.scripts.credentials as cr
-import sprint_2.scripts.main as m
+import scripts.credentials as cr
+import scripts.main as m
 
 
 with DAG(
@@ -21,7 +21,7 @@ with DAG(
         op_kwargs={"pexel_api_key": cr.PEXEL_API_KEY,
                    "webhook_teams": cr.WEBHOOK_TEAMS,
                    "quote_url": cr.QUOTE_URL,
-                   "owner": cr.OWNER},
+                   "message_sender_name": cr.MESSAGE_SENDER_NAME},
     )
 
     finish_op = EmptyOperator(task_id="finish")
