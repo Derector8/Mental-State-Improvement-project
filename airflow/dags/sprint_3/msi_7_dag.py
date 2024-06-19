@@ -20,8 +20,8 @@ restricted_dates = [
 ]
 
 
-def _skip_messages_on_dates():
-    date_now = datetime.today().strftime("%Y-%m-%d")
+def _skip_messages_on_dates(**kwargs):
+    date_now = kwargs["logical_date"].strftime("%Y-%m-%d")
     if date_now in restricted_dates:
         return "skip_message"
     return "send_quote_on_image_teams"
