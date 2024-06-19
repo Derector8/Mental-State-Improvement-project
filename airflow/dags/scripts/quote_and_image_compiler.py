@@ -55,10 +55,3 @@ def put_quote_on_image(image_url, quote_text, quote_author):
     logger.info("Image encoded")
 
     return encoded_image
-
-
-if __name__ == "__main__":
-    image_url = "https://www.funnyart.club/uploads/posts/2023-04/1682881890_funnyart-club-p-krasivii-les-krasivo-1.jpg"
-    quote_text = "Knowing is not enough; we must apply. Willing is not enough; we must do."
-    quote_author = "Mister President"
-    put_quote_on_image(image_url, quote_text, quote_author)
