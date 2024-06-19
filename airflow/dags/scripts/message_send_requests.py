@@ -6,7 +6,8 @@ from scripts.custom_errors import WebhookUrlError
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("Teams_Send_Message_Requests_Logger")
 
-def send_message_requests(webhook_url, encoded_image, message_sender_name):
+def send_message_requests(webhook_url, message_sender_name, **kwargs):
+    image = kwargs["ti"].xcom_pull(key="encoded_image")
 
     json_data = {
         "type": "message",
@@ -26,7 +27,7 @@ def send_message_requests(webhook_url, encoded_image, message_sender_name):
                         },
                         {
                             "type": "Image",
-                            "url": f"{encoded_image}",
+                            "url": f"{image}",
                         },
                     ],
                 },

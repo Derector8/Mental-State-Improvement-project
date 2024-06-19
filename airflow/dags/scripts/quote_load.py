@@ -21,7 +21,8 @@ def get_response(quote_url):
     return quote_response
 
 
-def get_quote(quote_url):
+def get_quote(**kwargs):
+    quote_url = "https://zenquotes.io/api/random"
     quote_response = get_response(quote_url)
     try:
         response_dict = quote_response.json()
@@ -32,17 +33,16 @@ def get_quote(quote_url):
         quote_text = response_dict[0]["q"]
         logger.info("Quote text extracted successfully")
     except KeyError:
-        raise KeyError("Wrong key: 'q' for quote in response dict")
+        raise KeyError("No key 'q' in response dict")
 
     try:
         quote_author = response_dict[0]["a"]
         logger.info("Quote author extracted successfully")
     except KeyError:
-        raise KeyError("Wrong key: 'a' for author in response dict")
+        raise KeyError("No key 'a' in response dict")
 
-    logger.info(f"\nQuote:{quote_text}\n"
-                f"Author:{quote_author}")
-    return quote_text, quote_author
+    kwargs["ti"].xcom_push(key="quote_text", value=quote_text)
+    kwargs["ti"].xcom_push(key="quote_author", value=quote_author)
 
 
 if __name__ == "__main__":
