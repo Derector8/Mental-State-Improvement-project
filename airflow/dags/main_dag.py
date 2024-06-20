@@ -11,7 +11,7 @@ from airflow.utils.trigger_rule import TriggerRule
 import scripts.credentials as cr
 from scripts.image_load import (
     random_images,
-    search_images as toads_images,
+    search_images,
 )
 from scripts.send_message import send_message
 from scripts.quote_and_image_compiler import prepare_image
@@ -67,8 +67,9 @@ with DAG(
 
     get_image_toads_op = PythonOperator(
         task_id="get_image_toads",
-        python_callable=toads_images,
+        python_callable=search_images,
         provide_context=True,
+        op_kwargs={"pexel_api_key": cr.PEXEL_API_KEY},
     )
 
     put_quote_on_image_op = PythonOperator(
@@ -104,4 +105,3 @@ with DAG(
     check_wednesday_op >> [get_quote_toads_op, get_image_toads_op] >> put_quote_on_image_op
 
     put_quote_on_image_op >> send_message_op >> finish_op
-

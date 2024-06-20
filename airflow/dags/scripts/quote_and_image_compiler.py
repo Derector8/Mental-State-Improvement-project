@@ -25,7 +25,7 @@ def _get_image(image_url):
     return raw_image
 
 
-def _put_quote_on_image(**kwargs):
+def prepare_image(**kwargs):
     image_url = kwargs["ti"].xcom_pull(key="image_url")
     quote_text = kwargs["ti"].xcom_pull(key="quote_text")
     quote_author = kwargs["ti"].xcom_pull(key="quote_author")
@@ -56,14 +56,8 @@ def _put_quote_on_image(**kwargs):
     buf = BytesIO()
     image.save(buf, format="jpeg")
 
-    return buf
-
-
-def prepare_image(**kwargs):
-    buffered_image = _put_quote_on_image(kwargs)
-
     logger.info("Encoding image...")
-    image_data = base64.b64encode(buffered_image.getbuffer()).decode("utf-8")
+    image_data = base64.b64encode(buf.getbuffer()).decode("utf-8")
     encoded_image = f"data:image/jpeg;base64,{image_data}"
     logger.info("Image encoded")
 

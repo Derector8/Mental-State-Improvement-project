@@ -29,7 +29,7 @@ def search_images(
         "size": size,
         "color": color,
         "page": page,
-        "per_page": per_page
+        "per_page": per_page,
     }
     image_url = get_image_url(pexel_api_key, term, query_dict)
     kwargs["ti"].xcom_push(key="image_url", value=image_url)
