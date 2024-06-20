@@ -45,5 +45,9 @@ def get_quote(**kwargs):
     kwargs["ti"].xcom_push(key="quote_author", value=quote_author)
 
 
+def get_quote_toads(**kwargs):
+    kwargs["ti"].xcom_push(key="quote_text", value="It's Wednesday, my Dudes!")
+    kwargs["ti"].xcom_push(key="quote_author", value="")
+
 if __name__ == "__main__":
     get_quote("https://zenquotes.io/api/random")

@@ -36,7 +36,10 @@ def _put_quote_on_image(**kwargs):
     draw = ImageDraw.Draw(image)
 
     wrapped_quote = tw.fill(quote_text, width=30)
-    text = wrapped_quote + "\nAuthor: " + quote_author
+    if quote_author:
+        text = wrapped_quote + "\nAuthor: " + quote_author
+    else:
+        text = wrapped_quote
     position = (30, 0)
     bbox = draw.textbbox(position, text, font_size=20)
     draw.rectangle(bbox, fill="white")
