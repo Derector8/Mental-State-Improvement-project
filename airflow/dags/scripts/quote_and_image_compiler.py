@@ -40,6 +40,7 @@ def prepare_image(**kwargs):
         text = wrapped_quote + "\nAuthor: " + quote_author
     else:
         text = wrapped_quote
+
     position = (30, 0)
     bbox = draw.textbbox(position, text, font_size=20)
     draw.rectangle(bbox, fill="white")

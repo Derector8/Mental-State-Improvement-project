@@ -1,6 +1,10 @@
 from datetime import datetime
 
 from airflow import DAG
+from airflow.models import (
+    Param,
+    Variable,
+)
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import (
     PythonOperator,
@@ -24,6 +28,11 @@ from scripts.additional_functions import (
     check_restricted_dates,
 )
 
+# Setting sensitive variables, while no secret backend implemented:
+Variable.set(key="secret_pexel_api_key", value=f"{cr.PEXEL_API_KEY}")
+Variable.set(key="secret_teams_webhook_url", value=f"{cr.WEBHOOK_TEAMS}")
+# For more privacy comment 2 upper lines and create variables -
+# secret_pexel_api_key, secret_teams_webhook_url manually in airflow UI
 
 with DAG(
         dag_id="MSI_main_dag",
@@ -31,6 +40,9 @@ with DAG(
         schedule_interval="0 12 * * *",
         tags=["MSI_final", "main"],
         catchup=False,
+        params={
+            "message_sender_name": Param("Roman Bukharev", type="string"),
+        }
 ) as dag:
     start_op = EmptyOperator(task_id="start")
 
@@ -56,7 +68,6 @@ with DAG(
         task_id="get_image",
         python_callable=random_images,
         provide_context=True,
-        op_kwargs={"pexel_api_key": cr.PEXEL_API_KEY},
     )
 
     get_quote_toads_op = PythonOperator(
@@ -69,7 +80,6 @@ with DAG(
         task_id="get_image_toads",
         python_callable=search_images,
         provide_context=True,
-        op_kwargs={"pexel_api_key": cr.PEXEL_API_KEY},
     )
 
     put_quote_on_image_op = PythonOperator(
@@ -80,13 +90,9 @@ with DAG(
     )
 
     send_message_op = PythonOperator(
-        task_id='send_message',
+        task_id="send_message",
         python_callable=send_message,
         provide_context=True,
-        op_kwargs={
-            "webhook_url": cr.WEBHOOK_TEAMS,
-            "message_sender_name": cr.MESSAGE_SENDER_NAME,
-        },
     )
 
     skip_message_op = EmptyOperator(task_id="skip_message")
