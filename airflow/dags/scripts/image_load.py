@@ -1,9 +1,9 @@
 import logging
 import random
 
+import requests
 from airflow.models import Variable
 
-import requests
 from scripts.custom_errors import (
     APINotAvailable,
     PexelAPIKeyError,
@@ -49,7 +49,12 @@ def random_images(
     kwargs["ti"].xcom_push(key="image_url", value=image_url)
 
 
-def get_image_url(pexel_api_key, term, query, size="medium"):
+def get_image_url(
+        pexel_api_key,
+        term,
+        query,
+        size="medium",
+):
     api_url = "https://api.pexels.com/v1/"
     headers = {"Authorization": pexel_api_key}
     logger.info("Connecting to Pexels API...")

@@ -28,11 +28,11 @@ from scripts.additional_functions import (
     check_restricted_dates,
 )
 
-#Setting sensitive variables, while no secret backend implemented:
+# Setting sensitive variables, while no secret backend implemented:
 Variable.set(key="secret_pexel_api_key", value=f"{cr.PEXEL_API_KEY}")
 Variable.set(key="secret_teams_webhook_url", value=f"{cr.WEBHOOK_TEAMS}")
-#For more privacy comment 2 upper lines and create variables manually in airflow UI:
-#secret_pexel_api_key, secret_teams_webhook_url
+# For more privacy comment 2 upper lines and create variables -
+# secret_pexel_api_key, secret_teams_webhook_url manually in airflow UI
 
 with DAG(
         dag_id="MSI_main_dag",
@@ -41,7 +41,7 @@ with DAG(
         tags=["MSI_final", "main"],
         catchup=False,
         params={
-            "message_sender_name": Param('Roman Bukharev', type='string'),
+            "message_sender_name": Param("Roman Bukharev", type="string"),
         }
 ) as dag:
     start_op = EmptyOperator(task_id="start")
@@ -90,7 +90,7 @@ with DAG(
     )
 
     send_message_op = PythonOperator(
-        task_id='send_message',
+        task_id="send_message",
         python_callable=send_message,
         provide_context=True,
     )
