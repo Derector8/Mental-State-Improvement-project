@@ -1,13 +1,17 @@
 import requests
 import logging
 
+from airflow.models import Variable
+
 from scripts.custom_errors import WebhookUrlError
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("Teams_Send_Message_Requests_Logger")
 
 
-def send_message(webhook_url, message_sender_name, **kwargs):
+def send_message(params, **kwargs):
+    message_sender_name = params["message_sender_name"]
+    webhook_url = Variable.get("secret_teams_webhook_url")
     image = kwargs["ti"].xcom_pull(key="encoded_image")
 
     json_data = {

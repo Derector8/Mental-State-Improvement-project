@@ -1,6 +1,8 @@
 import logging
 import random
 
+from airflow.models import Variable
+
 import requests
 from scripts.custom_errors import (
     APINotAvailable,
@@ -13,7 +15,6 @@ logger = logging.getLogger("Image_Load_Logger")
 
 
 def search_images(
-        pexel_api_key,
         key_word="toad",
         orientation="",
         size="",
@@ -22,6 +23,7 @@ def search_images(
         per_page=80,
         **kwargs,
 ):
+    pexel_api_key = Variable.get("secret_pexel_api_key")
     term = "search"
     query_dict = {
         "query": key_word,
@@ -36,11 +38,11 @@ def search_images(
 
 
 def random_images(
-        pexel_api_key,
         page=1,
         per_page=80,
         **kwargs,
 ):
+    pexel_api_key = Variable.get("secret_pexel_api_key")
     term = "curated"
     query_dict = {"page": page, "per_page": per_page}
     image_url = get_image_url(pexel_api_key, term, query_dict)
